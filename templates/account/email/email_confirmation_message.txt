@@ -1,0 +1,13 @@
+{% load i18n %}{% autoescape off %}
+{% blocktrans %}Hello from {{ site_name }}!{% endblocktrans %}
+
+{% blocktrans %}You're receiving this e-mail because you have registered an account on {{ site_name }}.{% endblocktrans %}
+
+{% blocktrans %}Please go to the following page to activate your account:{% endblocktrans %}
+{{ activate_url }}
+
+{% blocktrans %}Thanks for using our site!{% endblocktrans %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+{% endautoescape %}
+

@@ -1,0 +1,24 @@
+# Core Django Framework
+Django==4.2.7
+
+# Django REST Framework for creating APIs
+djangorestframework==3.14.0
+
+# For JWT (JSON Web Token) authentication
+djangorestframework-simplejwt==5.3.0
+
+# For handling social authentication (Google) and registration
+dj-rest-auth==5.0.2
+django-allauth==0.58.2
+
+# For handling Cross-Origin Resource Sharing (CORS) to allow our React frontend to communicate with the API
+django-cors-headers==4.3.1
+
+# For managing environment variables (for secret keys, etc.)
+django-environ==0.11.2
+
+# Pillow for ImageField support
+Pillow==10.1.0
+
+# Optional, but recommended for production database
+psycopg2-binary==2.9.9
