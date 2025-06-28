@@ -3,6 +3,7 @@
 from rest_framework import serializers
 from .models import Page, Section
 
+
 class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
@@ -15,20 +16,29 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = [
-            'id', 'owner', 'slug', 'sections', 'created_at',
-            # Pro Features
+            'id', 'owner', 'brand_name', 'title', 'slug', 'sections', 'created_at',
             'show_storefront_tab', 'background_color', 'background_image', 'template_theme'
         ]
+        read_only_fields = ['slug']
 
 class PageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
-        fields = ['slug'] # User only needs to provide a slug to start
+        fields = ['brand_name', 'title']
         
-    def validate_slug(self, value):
-        if Page.objects.filter(slug__iexact=value).exists():
+    def validate_brand_name(self, value):
+        if Page.objects.filter(brand_name__iexact=value).exists():
             raise serializers.ValidationError("This page name is already taken.")
         return value
+
+    def create(self, validated_data):
+        """
+        This explicit create method ensures that the owner, brand_name, and title
+        are all correctly passed when creating a new Page instance.
+        """
+        # The owner is passed from the view via `serializer.save(owner=...)`
+        # and becomes available in `validated_data` here.
+        return Page.objects.create(**validated_data)
 
 class SectionOrderSerializer(serializers.Serializer):
     section_ids = serializers.ListField(

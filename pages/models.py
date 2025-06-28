@@ -2,6 +2,7 @@
 
 from django.db import models
 from users.models import CustomUser
+from django.utils.text import slugify
 
 # Theme choices for Pro users
 THEME_CHOICES = [
