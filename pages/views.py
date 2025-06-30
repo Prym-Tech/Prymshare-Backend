@@ -13,36 +13,31 @@ from .serializers import PageSerializer, PageCreateSerializer, SectionSerializer
 
 class PageViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-
     def get_queryset(self):
         return Page.objects.filter(owner=self.request.user)
-
     def get_serializer_class(self):
         if self.action == 'create':
             return PageCreateSerializer
         return PageSerializer
-
     def perform_create(self, serializer):
         user = self.request.user
         if not user.can_create_page():
-            return Response(
-                {"detail": "You have reached the maximum number of pages for your plan."},
-                status=status.HTTP_403_FORBIDDEN
-            )
+            return Response({"detail": "You have reached the maximum number of pages for your plan."}, status=status.HTTP_403_FORBIDDEN)
         
         page = serializer.save(owner=user)
         
-        # --- Default Header section now includes a `description` field ---
+        # Default Header section now includes style and image URL fields
         Section.objects.create(
             page=page,
             section_type='header',
             position=0,
             is_enabled=True,
             content={
+                "style": "photo_top",
+                "profileImageUrl": "",
+                "bannerImageUrl": "",
                 "description": "This is my page! Check out my links below.",
-                "social_links": {
-                    "twitter": "", "instagram": "", "facebook": "", "linkedin": "", "tiktok": ""
-                }
+                "social_links": { "twitter": "", "instagram": "", "facebook": "" }
             }
         )
 

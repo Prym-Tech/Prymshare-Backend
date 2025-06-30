@@ -3,3 +3,6 @@ venv
 
 
 /.env
+/media
+./media
+media

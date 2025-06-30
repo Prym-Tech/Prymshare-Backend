@@ -50,7 +50,7 @@ class Section(models.Model):
         ('header', 'Header'),
         ('links', 'Links'),
         ('carousel', 'Carousel'),
-        ('video', 'Video'),
+        ('video_carousel', 'Video Carousel'),
         ('paywall', 'Paywall'),
         ('courses', 'Courses'),
         ('events', 'Events'),

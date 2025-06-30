@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'users',
     'pages',
     'storefront',
+    'images',
 ]
 
 # Required for django-allauth

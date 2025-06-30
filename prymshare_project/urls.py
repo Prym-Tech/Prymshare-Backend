@@ -11,6 +11,7 @@ urlpatterns = [
 
     # API endpoints for your apps
     path('api/', include('pages.urls')),
+    path('api/images/', include('images.urls')),
     # path('api/', include('storefront.urls')), # Uncomment when you create storefront.urls
 
     # Authentication endpoints from dj-rest-auth
