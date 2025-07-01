@@ -37,7 +37,9 @@ class PageViewSet(viewsets.ModelViewSet):
                 "profileImageUrl": "",
                 "bannerImageUrl": "",
                 "description": "This is my page! Check out my links below.",
-                "social_links": { "twitter": "", "instagram": "", "facebook": "" }
+                "social_links": {
+                    "twitter": "", "instagram": "", "facebook": "", "linkedin": "", "tiktok": "", "youtube": "" 
+                }
             }
         )
 

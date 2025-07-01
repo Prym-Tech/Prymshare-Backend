@@ -1,20 +1,26 @@
-# pages/models.py
-
 from django.db import models
-from users.models import CustomUser
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from users.models import CustomUser
 
-# Theme choices for Pro users
-THEME_CHOICES = [
-    ('default', 'Default'),
-    ('dark_mode', 'Dark Mode'),
-    ('misty_rose', 'Misty Rose'),
-]
+
+
+def get_default_theme():
+
+    return {
+        "template": "default",
+        "bgColor": "#F3F4F6",
+        "textColor": "#121B00",
+        "blockBgColor": "#FFFFFF",
+        "linkColor": "#FFFFFF",
+        "linkTextColor": "#121B00",
+        "actionButtonColor": "#121B00",
+        "actionButtonTextColor": "#FFFFFF",
+        "buttonShadowColor": "#000000",
+        "backgroundImageUrl": ""
+    }
 
 class Page(models.Model):
-    """
-    Represents a single user page (e.g., prymshare.co/theprympeeps).
-    """
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='pages')
     brand_name = models.CharField(max_length=100, unique=True, help_text="Your unique brand name. This will be used in your page URL.")
     title = models.CharField(max_length=100, blank=True, help_text="e.g., Fitness Coach, Digital Artist, Podcaster")
@@ -22,24 +28,58 @@ class Page(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+    # --- NEW FIELD FOR CUSTOMIZATION ---
+    theme_settings = models.JSONField(default=get_default_theme)
+    
     # Pro Features
     show_storefront_tab = models.BooleanField(default=False)
-    background_color = models.CharField(max_length=7, default='#FFFFFF') # Hex color
-    background_image = models.ImageField(upload_to='page_backgrounds/', blank=True, null=True)
-    template_theme = models.CharField(max_length=50, choices=THEME_CHOICES, default='default')
 
     def save(self, *args, **kwargs):
-        # Check plan limit on creation
         if not self.pk:
             if not self.owner.can_create_page():
                 raise ValidationError("User has reached the maximum number of pages for their plan.")
-        
-        # Auto-generate slug from the unique brand_name
         self.slug = slugify(self.brand_name)
         super().save(*args, **kwargs)
 
     def __str__(self):
         return self.brand_name
+
+# # Theme choices for Pro users
+# THEME_CHOICES = [
+#     ('default', 'Default'),
+#     ('dark_mode', 'Dark Mode'),
+#     ('misty_rose', 'Misty Rose'),
+# ]
+
+# class Page(models.Model):
+#     """
+#     Represents a single user page (e.g., prymshare.co/theprympeeps).
+#     """
+#     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='pages')
+#     brand_name = models.CharField(max_length=100, unique=True, help_text="Your unique brand name. This will be used in your page URL.")
+#     title = models.CharField(max_length=100, blank=True, help_text="e.g., Fitness Coach, Digital Artist, Podcaster")
+#     slug = models.SlugField(max_length=120, unique=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+    
+#     # Pro Features
+#     show_storefront_tab = models.BooleanField(default=False)
+#     background_color = models.CharField(max_length=7, default='#FFFFFF') # Hex color
+#     background_image = models.ImageField(upload_to='page_backgrounds/', blank=True, null=True)
+#     template_theme = models.CharField(max_length=50, choices=THEME_CHOICES, default='default')
+
+#     def save(self, *args, **kwargs):
+#         # Check plan limit on creation
+#         if not self.pk:
+#             if not self.owner.can_create_page():
+#                 raise ValidationError("User has reached the maximum number of pages for their plan.")
+        
+#         # Auto-generate slug from the unique brand_name
+#         self.slug = slugify(self.brand_name)
+#         super().save(*args, **kwargs)
+
+#     def __str__(self):
+#         return self.brand_name
 
 
 class Section(models.Model):

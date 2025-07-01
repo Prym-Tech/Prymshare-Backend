@@ -1,5 +1,3 @@
-# pages/serializers.py
-
 from rest_framework import serializers
 from .models import Page, Section
 
@@ -17,7 +15,8 @@ class PageSerializer(serializers.ModelSerializer):
         model = Page
         fields = [
             'id', 'owner', 'brand_name', 'title', 'slug', 'sections', 'created_at',
-            'show_storefront_tab', 'background_color', 'background_image', 'template_theme'
+            'show_storefront_tab', 
+            'theme_settings' 
         ]
         read_only_fields = ['slug']
 
