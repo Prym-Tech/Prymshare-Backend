@@ -13,11 +13,7 @@ class PageSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Page
-        fields = [
-            'id', 'owner', 'brand_name', 'title', 'slug', 'sections', 'created_at',
-            'show_storefront_tab', 
-            'theme_settings' 
-        ]
+        fields = '__all__'
         read_only_fields = ['slug']
 
 class PageCreateSerializer(serializers.ModelSerializer):

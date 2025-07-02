@@ -21,23 +21,33 @@ def get_default_theme():
     }
 
 class Page(models.Model):
+    DISPLAY_MODE_CHOICES = [
+        ('page_only', 'Page Only'),
+        ('store_only', 'Store Only'),
+        ('both', 'Both Page and Store'),
+    ]
+
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='pages')
-    brand_name = models.CharField(max_length=100, unique=True, help_text="Your unique brand name. This will be used in your page URL.")
-    title = models.CharField(max_length=100, blank=True, help_text="e.g., Fitness Coach, Digital Artist, Podcaster")
+    brand_name = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=100, blank=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # --- NEW FIELD FOR CUSTOMIZATION ---
     theme_settings = models.JSONField(default=get_default_theme)
     
-    # Pro Features
-    show_storefront_tab = models.BooleanField(default=False)
+    # --- FIELD UPDATED ---
+    # Replaced `show_storefront_tab` with a more flexible CharField.
+    display_mode = models.CharField(
+        max_length=20,
+        choices=DISPLAY_MODE_CHOICES,
+        default='page_only' # A more sensible default
+    )
 
     def save(self, *args, **kwargs):
         if not self.pk:
             if not self.owner.can_create_page():
-                raise ValidationError("User has reached the maximum number of pages for their plan.")
+                raise ValidationError("Upgrade to Pro to create more pages.")
         self.slug = slugify(self.brand_name)
         super().save(*args, **kwargs)
 

@@ -3,10 +3,16 @@
 from rest_framework import serializers
 from .models import Product, ShippingRate, Order, OrderItem
 
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
+        # Include all fields from the model
         fields = '__all__'
+        # Set 'owner' as read-only because it's determined by the request user, not client input
+        read_only_fields = ('owner',)
+
+
 
 class ShippingRateSerializer(serializers.ModelSerializer):
     class Meta:

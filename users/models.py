@@ -60,7 +60,7 @@ class CustomUser(AbstractUser):
     @property
     def max_pages_allowed(self):
         if self.user_type == 'pro':
-            return 3
+            return 2
         return 1
 
     def can_create_page(self):
