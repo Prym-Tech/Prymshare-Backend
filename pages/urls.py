@@ -2,7 +2,9 @@
 
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from .views import PageViewSet, SectionViewSet, get_nigerian_banks, resolve_bank_account
 from .views import PageViewSet, SectionViewSet
+from storefront.views import ProductViewSet # Import the ProductViewSet
 
 # Create a router and register our PageViewSet with it.
 router = DefaultRouter()
@@ -26,6 +28,10 @@ section_update_order = SectionViewSet.as_view({
     'post': 'update_order'
 })
 
+# Define URL patterns for the ProductViewSet manually.
+product_list = ProductViewSet.as_view({'get': 'list', 'post': 'create'})
+product_detail = ProductViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})
+
 
 # The final URL patterns for our app
 urlpatterns = [
@@ -37,4 +43,11 @@ urlpatterns = [
     path('pages/<int:page_pk>/sections/', section_list, name='page-section-list'),
     path('pages/<int:page_pk>/sections/update-order/', section_update_order, name='page-section-update-order'),
     path('pages/<int:page_pk>/sections/<int:pk>/', section_detail, name='page-section-detail'),
+
+    path('pages/<int:page_pk>/products/', product_list, name='page-product-list'),
+    path('pages/<int:page_pk>/products/<int:pk>/', product_detail, name='page-product-detail'),
+
+    # New URLs for Paystack integration
+    path('payments/banks/', get_nigerian_banks, name='get-nigerian-banks'),
+    path('payments/resolve-account/', resolve_bank_account, name='resolve-bank-account'),
 ]

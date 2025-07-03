@@ -44,6 +44,13 @@ class Page(models.Model):
         default='page_only' # A more sensible default
     )
 
+    # Paystack payment integration fields
+    subaccount_code = models.CharField(max_length=100, blank=True, null=True)
+    bank_name = models.CharField(max_length=255, blank=True, null=True)
+    bank_code = models.CharField(max_length=20, blank=True, null=True) # Storing bank code is useful
+    account_number = models.CharField(max_length=20, blank=True, null=True)
+    account_name = models.CharField(max_length=255, blank=True, null=True)
+
     def save(self, *args, **kwargs):
         if not self.pk:
             if not self.owner.can_create_page():

@@ -39,3 +39,14 @@ class SectionOrderSerializer(serializers.Serializer):
     section_ids = serializers.ListField(
         child=serializers.IntegerField()
     )
+
+class PagePaymentSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Page
+        fields = [
+            'subaccount_code',
+            'bank_name',
+            'bank_code',
+            'account_number',
+            'account_name'
+        ]
